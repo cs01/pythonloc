@@ -8,9 +8,20 @@ import sys
 import pip
 
 
+def get_target_dir():
+    """returns path in compliance with PEP 582
+    https://www.python.org/dev/peps/pep-0582/
+    """
+    return os.path.join(
+        "__pypackages__",
+        str(sys.version_info.major) + "." + str(sys.version_info.minor),
+        "lib",
+    )
+
+
 def get_env():
     env = dict(os.environ)
-    env["PYTHONPATH"] = "__pypackages__:" + env.get("PYTHONPATH", ":")
+    env["PYTHONPATH"] = ".:" + get_target_dir() + ":" + env.get("PYTHONPATH", "")
     return env
 
 
@@ -31,7 +42,7 @@ def piploc():
     if "install" in pip_args:
         if "--target" not in pip_args:
             # use target dir if installing
-            target = ["--target", "__pypackages__"]
+            target = ["--target", get_target_dir()]
         if (
             pip.__version__.startswith("9.") or pip.__version__.startswith("10.")
         ) and "--system" not in pip_args:

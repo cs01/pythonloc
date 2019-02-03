@@ -25,7 +25,7 @@ python3 -m pip install --user pythonloc
 you will have two CLI tools available to you: **pythonloc** and **piploc**
 
 ### pythonloc
-Short for "python local", it is a drop-in replacement for python with one important difference: the local directory `__pypackages__` is added to the front of `sys.path`.
+Short for "python local", it is a drop-in replacement for python with one important difference: the local directory `__pypackages__/<version>/lib` is added to the front of `sys.path`. `<version>` is the Python version, something like `3.7`.
 
 ### piploc
 Short for "pip local", it invokes pip with the same `sys.path` as `pythonloc`. If installing a package, the target installation directory is modified to be `__pypackages__` instead of the global `site-packages`.
@@ -48,7 +48,7 @@ Installing collected packages: urllib3, certifi, chardet, idna, requests
 Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0 urllib3-1.24.1
 
 > pythonloc myapp.py  # works!
-<module 'requests' from '/tmp/demo/__pypackages__/requests/__init__.py'>
+<module 'requests' from '/tmp/demo/__pypackages__/3.6/lib/requests/__init__.py'>
 ```
 
 ### CLI
@@ -73,7 +73,7 @@ Installing collected packages: urllib3, certifi, chardet, idna, requests
 Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0 urllib3-1.24.1
 
 > pythonloc -c "import requests; print(requests)"  # requests is now found
-<module 'requests' from '/tmp/demo/__pypackages__/requests/__init__.py'>
+<module 'requests' from '/tmp/demo/__pypackages__/3.6/lib/requests/__init__.py'>
 
 > piploc uninstall requests  # uninstalls from __pypackages__
 Successfully uninstalled requests-2.21.0
@@ -83,12 +83,12 @@ Successfully uninstalled requests-2.21.0
 ## FAQ
 
 ### How is this different from a virtual environment?
-* A virtual environment may or may not include system packages, whereas `pythonloc` will first look for packages in `__pypackages__`, then in other locations such as user or site-packages.
+* A virtual environment may or may not include system packages, whereas `pythonloc` will first look for packages in `.`, then `__pypackages__`, then in other locations such as user or site-packages.
 * `pythonloc` does not require activation or deactivation
 * `pythonloc` only looks for a local directory called `__pypackages__`. On the other hand, virtual environment activation modifies your `PATH` so you can access virtual environment packages no matter which directory you're in.
 
 ### How does it work?
-It's quite simple and clocks in at less than lines of 50 code. It uses features already built into Python and pip.
+It's quite simple and clocks in at less than lines of 100 code. It uses features already built into Python and pip.
 
 All it does is provide a slight level of indirection when invoking Python and pip. It modifies the `PYTHONPATH` environment variable when running Python to include `__pypackages__`.
 
@@ -99,7 +99,7 @@ pythonloc is an alias for `PYTHONPATH=__pypackages__:$PYTHONPATH python PYTHONAR
 To install packages to the `__pypackages__` directory, it uses pip and runs
 
 ```bash
-PYTHONPATH=__pypackages__:$PYTHONPATH python -m pip PIPARGS
+PYTHONPATH=.:__pypackages__/<version>/lib:$PYTHONPATH python -m pip PIPARGS
 ```
 where `PIPARGS` are whatever arguments you pass it, such as `piploc install requests`.
 
@@ -118,7 +118,7 @@ Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0
 > ls  # note __pypackages__ was created
 __pypackages__
 
-> ls __pypackages__/
+> ls __pypackages__/3.6/lib
 bin                           idna-2.8.dist-info
 certifi                       requests
 certifi-2018.11.29.dist-info  requests-2.21.0.dist-info
