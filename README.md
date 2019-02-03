@@ -22,7 +22,7 @@ After installing with
 ```
 python3 -m pip install --user pythonloc
 ```
-you will have two CLI tools available to you: **pythonloc** and **piploc**
+you will have three CLI tools available to you: **pythonloc**, **piploc**, and **pipfreezeloc**.
 
 ### pythonloc
 Short for "python local", it is a drop-in replacement for python with one important difference: the local directory `__pypackages__/<version>/lib` is added to the front of `sys.path`. `<version>` is the Python version, something like `3.7`.
@@ -31,6 +31,9 @@ Short for "python local", it is a drop-in replacement for python with one import
 Short for "pip local", it invokes pip with the same `sys.path` as `pythonloc`. If installing a package, the target installation directory is modified to be `__pypackages__` instead of the global `site-packages`.
 
 If `__pypackages__` directory does not exist it will be created.
+
+### pipfreezeloc
+Equivalent of `pip freeze` but only outputs packages in `__pypackages__`. This is required because there is no built-in way to do this with standard pip. For example, the command `pip freeze --target __pypackages__` does not exist.
 
 ## Examples
 
@@ -49,6 +52,10 @@ Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0
 
 > pythonloc myapp.py  # works!
 <module 'requests' from '/tmp/demo/__pypackages__/3.6/lib/requests/__init__.py'>
+
+> pipfreezeloc
+requests==2.21.0
+
 ```
 
 ### CLI
@@ -145,6 +152,11 @@ then run `deactivate` to make sure you are not using a virtual environment, then
 You can use a requirements.txt file like so
 ```
 piploc install -r requirements.txt
+```
+
+You can generate a requirements.txt file from `__pypackages__` like so
+```
+pipfreezeloc > requirements.txt
 ```
 
 ### poetry.lock?

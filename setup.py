@@ -23,7 +23,7 @@ with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
 
 setup(
     name="pythonloc",
-    version="0.0.0.2",
+    version="0.0.0.3",
     author="Chad Smith",
     author_email="grassfedcode@gmail.com",
     description="Run Python using packages from local directory __pypackages__",
@@ -38,6 +38,7 @@ setup(
         "console_scripts": [
             "pythonloc = pythonloc.pythonloc:pythonloc",
             "piploc = pythonloc.pythonloc:piploc",
+            "pipfreezeloc = pythonloc.pythonloc:pipfreezeloc",
         ]
     },
     zip_safe=False,

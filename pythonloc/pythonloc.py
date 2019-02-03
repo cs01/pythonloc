@@ -35,10 +35,7 @@ def pythonloc():
     return subprocess.Popen(cmd, env=get_env()).wait()
 
 
-def piploc():
-    signal.signal(signal.SIGINT, null_handler)
-    pip_args = sys.argv[1:]
-
+def _get_pip_target_args(pip_args):
     if "install" in pip_args:
         if "--target" not in pip_args:
             # use target dir if installing
@@ -49,6 +46,39 @@ def piploc():
             target += ["--system"]
     else:
         target = []
+    return target
 
+
+def piploc():
+    signal.signal(signal.SIGINT, null_handler)
+    pip_args = sys.argv[1:]
+    target = _get_pip_target_args(pip_args)
     cmd = [sys.executable, "-m", "pip"] + pip_args + target
     return subprocess.Popen(cmd, env=get_env()).wait()
+
+
+def pipfreezeloc():
+    cmd = [sys.executable, "-m", "pip", "freeze"]
+    p = subprocess.Popen(cmd, env=get_env(), stdout=subprocess.PIPE)
+    try:
+        outs, errs = p.communicate()
+        if outs is None:
+            all_reqs = set()
+        else:
+            all_reqs = set(outs.decode().split("\n"))
+    except Exception:
+        p.kill()
+        exit("failed to run pip freeze")
+
+    p = subprocess.Popen(cmd, stdout=subprocess.PIPE)
+    try:
+        outs, errs = p.communicate()
+        if outs is None:
+            sys_reqs = set()
+        else:
+            sys_reqs = set(outs.decode().split("\n"))
+    except Exception:
+        p.kill()
+        exit("failed to run pip freeze")
+    for i in all_reqs - sys_reqs:
+        print(i)
