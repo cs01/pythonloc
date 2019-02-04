@@ -4,43 +4,120 @@
 <img src="https://github.com/cs01/pythonloc/raw/master/pythonloc.png"/>
 </p>
 
-**pythonloc** is a drop in replacement for python that automatically recognizes a `__pypackages__` directory and prefers importing packages installed in this location over user or global site-packages. If you are familiar with node, it is similar to `node_modules`.
+**pythonloc** is a drop in replacement for `python` and `pip` that automatically recognizes a `__pypackages__` directory and prefers importing packages installed in this location over user or global site-packages. If you are familiar with node, `__pypackages__` works similarly to `node_modules`.
 
-It helps to manage and deploy isolated, reproducible environments. Isolating package installations avoids version conflicts.
+So instead of running `python` you run `pythonloc` and the `__pypackages__` path will automatically be searched first for packages. And instead of running `pip` you run `piploc` and it will install/uninstall from `__pypackages__`.
 
-This will avoid the steps to create, activate or deactivate "virtual environments", including tools relying on virtual environments such as pipenv or poetry. Python will use the `__pypackages__` from the base directory of the script when present.
+This is an alternative to using Virtual Environments.
 
-This is an alternate pure Python implementation of [PEP 582](https://www.python.org/dev/peps/pep-0582/). The goal of pythonloc is to make an accessible tool while discussion takes place around adding this functionality to CPython itself. If you prefer, you can [build your own CPython](https://github.com/kushaldas/cpython/tree/pypackages) with these changes instead of using `pythonloc`.
+This is a Python implementation of [PEP 582](https://www.python.org/dev/peps/pep-0582/), "Python local packages directory". The goal of pythonloc is to make an accessible tool while discussion takes place around adding this functionality to CPython itself. If you prefer, you can [build your own CPython](https://github.com/kushaldas/cpython/tree/pypackages) with these changes instead of using `pythonloc`.
+
+## System Requirements
+* Python 2.7+
+* pip
+
 
 ## Installation: What's in the box?
-
-### System Requirements
-* Python 2.7+ installed
-* pip installed
-
 After installing with
+```
+pip install --user pythonloc
+```
+or
 ```
 python3 -m pip install --user pythonloc
 ```
 you will have three CLI tools available to you: **pythonloc**, **piploc**, and **pipfreezeloc**.
 
 ### pythonloc
-Short for "python local", it is a drop-in replacement for python with one important difference: the local directory `__pypackages__/<version>/lib` is added to the front of `sys.path`. `<version>` is the Python version, something like `3.7`.
+Short for "python local", it is a drop-in replacement for python with one important difference: the local directory `__pypackages__/<version>/lib` is added to the front of `sys.path`. `<version>` is the Python version, something like `3.7`. All arguments are forwarded to `python`.
+
+So instead of running
+```
+python ...
+```
+
+you would run
+
+```
+pythonloc ...
+```
 
 ### piploc
 Short for "pip local", it invokes pip with the same `sys.path` as `pythonloc`. If installing a package, the target installation directory is modified to be `__pypackages__` instead of the global `site-packages`.
 
 If `__pypackages__` directory does not exist it will be created.
 
+All arguments are forwarded to `pip`.
+
+So instead of running
+```
+pip ...
+```
+
+you would run
+
+```
+piploc ...
+```
+
 ### pipfreezeloc
-Equivalent of `pip freeze` but only outputs packages in `__pypackages__`. This is required because there is no built-in way to do this with standard pip. For example, the command `pip freeze --target __pypackages__` does not exist.
+Running `pip freeze` presents a problem because it shows all installed python packages: those in `site-packages` as well as in `__pypackages__`. You likely only want to output the packages installed to `__pypackages__` and that is exactly what `pipfreezeloc` does.
+
+It is the equivalent of `pip freeze` but only outputs packages in `__pypackages__`. This is required because there is no built-in way to do this with standard pip. For example, the command `pip freeze --target __pypackages__` does not exist.
+
+No arguments are handled with `pipfreezeloc`.
+
+So instead of running
+```
+pip freeze > requirements.txt
+```
+
+you would run
+
+```
+pipfreezeloc > requirements.txt
+```
+
+## Installing from Lockfiles
+This works just like it does in pip. You just need a `requirements.txt` file to install from.
+
+### Installing from `requirements.txt`
+```
+piploc install -r requirements.txt
+pythonloc <app>
+```
+
+### Installing from `poetry.lock`
+pip cannot read poetry.lock files, so you'll have to generate a requirements.txt file.
+```
+poetry run pip freeze > requirements.txt
+piploc install -r requirements.txt
+pythonloc <app>
+```
+
+There may be an `export` command coming to `poetry` but it hasn't landed yet. See https://github.com/sdispater/poetry/pull/675.
+
+### Installing from `Pipfile.lock`
+pip cannot read `Pipfile`s yet, only pipenv can. So you will need to generate requirements.txt using pipenv.
+```
+pipenv lock --requirements
+pipenv lock --requirements --dev
+piploc install -r requirements.txt
+pythonloc <app>
+```
+
+## Exporting to Lockfiles
+```
+pipfreezeloc > requirements.txt
+```
 
 ## Examples
 
 ### Script
 
-`myapp.py`:
+
 ```python
+# myapp.py
 import requests
 print(requests)
 ```
@@ -50,12 +127,11 @@ print(requests)
 Installing collected packages: urllib3, certifi, chardet, idna, requests
 Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0 urllib3-1.24.1
 
-> pythonloc myapp.py  # works!
-<module 'requests' from '/tmp/demo/__pypackages__/3.6/lib/requests/__init__.py'>
-
 > pipfreezeloc
 requests==2.21.0
 
+> pythonloc myapp.py  # works!
+<module 'requests' from '/tmp/demo/__pypackages__/3.6/lib/requests/__init__.py'>
 ```
 
 ### CLI
@@ -75,14 +151,14 @@ Traceback (most recent call last):
   File "<string>", line 1, in <module>
 ModuleNotFoundError: No module named 'requests'
 
-> piploc install requests  # installs to __pypackages__
+> piploc install requests  # installs to __pypackages__/3.6/lib/requests
 Installing collected packages: urllib3, certifi, chardet, idna, requests
 Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0 urllib3-1.24.1
 
 > pythonloc -c "import requests; print(requests)"  # requests is now found
 <module 'requests' from '/tmp/demo/__pypackages__/3.6/lib/requests/__init__.py'>
 
-> piploc uninstall requests  # uninstalls from __pypackages__
+> piploc uninstall requests  # uninstalls from __pypackages__/3.6/lib/requests
 Successfully uninstalled requests-2.21.0
 ```
 
@@ -99,9 +175,10 @@ It's quite simple and clocks in at less than lines of 100 code. It uses features
 
 All it does is provide a slight level of indirection when invoking Python and pip. It modifies the `PYTHONPATH` environment variable when running Python to include `__pypackages__`.
 
+If you consult the output of `python --help`, you'll see this:
 > PYTHONPATH is a ':'-separated list of directories prefixed to the default module search path.  The result is sys.path.
 
-pythonloc is an alias for `PYTHONPATH=__pypackages__:$PYTHONPATH python PYTHONARGS`
+pythonloc is an alias for `PYTHONPATH=.:__pypackages__/<version>/lib:$PYTHONPATH python PYTHONARGS`
 
 To install packages to the `__pypackages__` directory, it uses pip and runs
 
@@ -147,32 +224,6 @@ If you get the error
 > Not uninstalling PACKAGE at ..., outside environment ...
 
 then run `deactivate` to make sure you are not using a virtual environment, then try again.
-
-### requirements.txt?
-You can use a requirements.txt file like so
-```
-piploc install -r requirements.txt
-```
-
-You can generate a requirements.txt file from `__pypackages__` like so
-```
-pipfreezeloc > requirements.txt
-```
-
-### poetry.lock?
-pip cannot read poetry.lock files, so you'll have to generate a requirements.txt file.
-```
-poetry run pip freeze > requirements.txt
-```
-
-There may be an `export` command coming to `poetry` but it hasn't landed yet. See https://github.com/sdispater/poetry/pull/675.
-
-### Pipfile/Pipfile.lock?
-pip cannot read `Pipfile`s yet, only pipenv can. So you will need to generate requirements.txt using pipenv.
-```
-pipenv lock --requirements
-pipenv lock --requirements --dev
-```
 
 ### Can I make `python` do this instead of calling `pythonloc`?
 An easy way to get this behavior is to create a symlink in your local directory
