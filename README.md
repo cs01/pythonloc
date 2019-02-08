@@ -17,11 +17,11 @@ This is a Python implementation of [PEP 582](https://www.python.org/dev/peps/pep
 
 ## Testimonials
 
-> Chad has been working and writing some exciting python tools and articles in the packaging/pip space.
+Chad has been working and writing some exciting python tools and articles in the packaging/pip space.
 
 — [Jeff Triplett](https://twitter.com/webology/status/1092856644512505856), Python Software Foundation Director
 
-> I’m very enthusiastic about how `__pypackages__` could help simplify and streamline the Python dependencies workflow. Well done on bringing an early prototype implementation for people to test!
+I’m very enthusiastic about how `__pypackages__` could help simplify and streamline the Python dependencies workflow. Well done on bringing an early prototype implementation for people to test!
 
 — Florimond Manca, Creator of [Bocadillo Project](https://github.com/bocadilloproject)
 
