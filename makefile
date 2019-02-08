@@ -8,4 +8,4 @@ publish: build
 	python3 -m twine upload dist/*
 
 clean:
-	rm -r build dist
+	rm -r build dist || true

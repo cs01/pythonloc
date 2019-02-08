@@ -14,7 +14,6 @@ def get_pypackages_lib_path(script_path=None):
     if script_path:
         # use __pypackages__ relative to the script being run
         pypackages = os.path.join(os.path.dirname(script_path), "__pypackages__")
-        print(pypackages)
     else:
         pypackages = "__pypackages__"
 

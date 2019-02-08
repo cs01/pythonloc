@@ -5,7 +5,7 @@
 </p>
 
 <a href="https://pypi.python.org/pypi/pythonloc/">
-<img src="https://img.shields.io/badge/pypi-0.1.1.0-blue.svg" /></a>
+<img src="https://img.shields.io/badge/pypi-0.1.1.1-blue.svg" /></a>
 
 **pythonloc** is a drop in replacement for `python` and `pip` that automatically recognizes a `__pypackages__` directory and prefers importing packages installed in this location over user or global site-packages. If you are familiar with node, `__pypackages__` works similarly to `node_modules`.
 
