@@ -4,6 +4,9 @@
 <img src="https://github.com/cs01/pythonloc/raw/master/pythonloc.png"/>
 </p>
 
+<a href="https://pypi.python.org/pypi/pythonloc/">
+<img src="https://img.shields.io/badge/pypi-0.1.1.0-blue.svg" /></a>
+
 **pythonloc** is a drop in replacement for `python` and `pip` that automatically recognizes a `__pypackages__` directory and prefers importing packages installed in this location over user or global site-packages. If you are familiar with node, `__pypackages__` works similarly to `node_modules`.
 
 So instead of running `python` you run `pythonloc` and the `__pypackages__` path will automatically be searched first for packages. And instead of running `pip` you run `piploc` and it will install/uninstall from `__pypackages__`.
@@ -11,6 +14,16 @@ So instead of running `python` you run `pythonloc` and the `__pypackages__` path
 This is an alternative to using Virtual Environments.
 
 This is a Python implementation of [PEP 582](https://www.python.org/dev/peps/pep-0582/), "Python local packages directory". The goal of pythonloc is to make an accessible tool while discussion takes place around adding this functionality to CPython itself. If you prefer, you can [build your own CPython](https://github.com/kushaldas/cpython/tree/pypackages) with these changes instead of using `pythonloc`.
+
+## Testimonials
+
+> Chad has been working and writing some exciting python tools and articles in the packaging/pip space.
+
+— [Jeff Triplett](https://twitter.com/webology/status/1092856644512505856), Python Software Foundation Director
+
+> I’m very enthusiastic about how `__pypackages__` could help simplify and streamline the Python dependencies workflow. Well done on bringing an early prototype implementation for people to test!
+
+— Florimond Manca, Creator of [Bocadillo Project](https://github.com/bocadilloproject)
 
 ## System Requirements
 * Python 2.7+
