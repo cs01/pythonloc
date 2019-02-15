@@ -17,11 +17,13 @@ This is a Python implementation of [PEP 582](https://www.python.org/dev/peps/pep
 
 ## Testimonials
 
-Chad has been working and writing some exciting python tools and articles in the packaging/pip space.
+*Featured on [episode #117](https://pythonbytes.fm/episodes/show/117/is-this-the-end-of-python-virtual-environments) of the Python bytes podcast.*
+
+"Chad has been working and writing some exciting python tools and articles in the packaging/pip space."
 
 — [Jeff Triplett](https://twitter.com/webology/status/1092856644512505856), Python Software Foundation Director
 
-I’m very enthusiastic about how `__pypackages__` could help simplify and streamline the Python dependencies workflow. Well done on bringing an early prototype implementation for people to test!
+"I’m very enthusiastic about how `__pypackages__` could help simplify and streamline the Python dependencies workflow. Well done on bringing an early prototype implementation for people to test!"
 
 — Florimond Manca, Creator of [Bocadillo Project](https://github.com/bocadilloproject)
 
@@ -91,7 +93,7 @@ you would run
 pipfreezeloc > requirements.txt
 ```
 
-## Installing from Lockfiles
+## Installing from requirements.txt/Lockfiles
 This works just like it does in pip. You just need a `requirements.txt` file to install from.
 
 ### Installing from `requirements.txt`
@@ -175,6 +177,14 @@ Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0
 Successfully uninstalled requests-2.21.0
 ```
 
+## Downsides?
+
+While this PEP is pretty exciting, there are a some things it doesn't solve.
+
+* entrypoints: when you install a package, any entry points a package may have in the `bin` folder (like `black` or `tox`) are not accessible based on this PEP. A tool designed to install packages globally, yet keep them sandboxed is [pipx](https://github.com/pipxproject/pipx) (also my project). This works well for installing a single version globally, but using virtual environments directly will let you run entry points as you'd expect.
+* OS-dependent packages: The directory structure in `__pypackages__` is namespaced on python version, so packages for Python 3.6 will not mix with 3.7, which is great. But sometimes packages install differently for different OS's, so Windows may not match mac, etc.
+* site-packages: This PEP first looks to `__pypackages__` but will fall back to looking in `site-packages`. This is not entirely hermetic and could lead to some confusion around which packages are being used. I would prefer the search path be **only** `__pypackages__` and nothing else.
+* perceived downside -- bloat: Many have brought this up in various forums, comparing it to `node_modules`, but I don't think it applies here. For one, the same if not more "bloat" is installed into a virtual environment, so this just moves it into a local directory. No additional bloat. In fact, it is more obvious and can be deleted because it's not hidden away in a virtual env directory.  But more importantly, I think the assumption that it is bloated or will be abused stems from JavaScript's ecosystem. JavaScript has a notoriously limited standard library, and developers need to reach for third party packages more often. In addition, the JavaScript development heavily relies on many plugins and transpilation, something Python does not. I do not find the bloat argument convincing.
 
 ## FAQ
 
