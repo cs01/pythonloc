@@ -26,8 +26,9 @@ def get_pypackages_lib_path(script_path=None):
 
 def get_env(script_path=None):
     env = dict(os.environ)
-    env["PYTHONPATH"] = (
-        ".:" + get_pypackages_lib_path(script_path) + ":" + env.get("PYTHONPATH", "")
+    env["PYTHONPATH"] = os.path.pathsep.join(
+        [".", get_pypackages_lib_path(script_path)]
+        + os.getenv("PYTHONPATH", "").split(os.path.pathsep)
     )
     return env
 
