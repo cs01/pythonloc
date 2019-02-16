@@ -5,7 +5,7 @@
 </p>
 
 <a href="https://pypi.python.org/pypi/pythonloc/">
-<img src="https://img.shields.io/badge/pypi-0.1.1.1-blue.svg" /></a>
+<img src="https://img.shields.io/badge/pypi-0.1.1.2-blue.svg" /></a>
 
 **pythonloc** is a drop in replacement for `python` and `pip` that automatically recognizes a `__pypackages__` directory and prefers importing packages installed in this location over user or global site-packages. If you are familiar with node, `__pypackages__` works similarly to `node_modules`.
 
@@ -181,7 +181,7 @@ Successfully uninstalled requests-2.21.0
 
 While this PEP is pretty exciting, there are a some things it doesn't solve.
 
-* entrypoints: when you install a package, any entry points a package may have in the `bin` folder (like `black` or `tox`) are not accessible based on this PEP. A tool designed to install packages globally, yet keep them sandboxed is [pipx](https://github.com/pipxproject/pipx) (also my project). This works well for installing a single version globally, but using virtual environments directly will let you run entry points as you'd expect.
+* entrypoints: when you install a package, any entry points a package may have in the `bin` folder (like `black` or `tox`) are not accessible based on this PEP. [pipx](https://github.com/pipxproject/pipx) (also my project), is the perfect tool to search in `__pypackages__/3.6/lib/bin` for the entry point you want to run. So you would run `pipx run tox` and it would locate `__pypackages__/3.6/lib/bin`. (It doesn't currently do this.) This is very similar to [npx](https://www.npmjs.com/package/npx), which will search in `node_modules/bin`.
 * OS-dependent packages: The directory structure in `__pypackages__` is namespaced on python version, so packages for Python 3.6 will not mix with 3.7, which is great. But sometimes packages install differently for different OS's, so Windows may not match mac, etc.
 * site-packages: This PEP first looks to `__pypackages__` but will fall back to looking in `site-packages`. This is not entirely hermetic and could lead to some confusion around which packages are being used. I would prefer the search path be **only** `__pypackages__` and nothing else.
 * perceived downside -- bloat: Many have brought this up in various forums, comparing it to `node_modules`, but I don't think it applies here. For one, the same if not more "bloat" is installed into a virtual environment, so this just moves it into a local directory. No additional bloat. In fact, it is more obvious and can be deleted because it's not hidden away in a virtual env directory.  But more importantly, I think the assumption that it is bloated or will be abused stems from JavaScript's ecosystem. JavaScript has a notoriously limited standard library, and developers need to reach for third party packages more often. In addition, the JavaScript development heavily relies on many plugins and transpilation, something Python does not. I do not find the bloat argument convincing.
