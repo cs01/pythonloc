@@ -11,10 +11,9 @@
 
 import io
 import os
-import sys
-from setuptools import find_packages, setup, Command
+from setuptools import find_packages, setup
 
-DEPENDENCIES = []
+DEPENDENCIES = ["pipx>=0.12.2.0"]
 EXCLUDE_FROM_PACKAGES = ["contrib", "docs", "tests*"]
 CURDIR = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,7 +22,7 @@ with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
 
 setup(
     name="pythonloc",
-    version="0.1.1.2",
+    version="0.1.2.0",
     author="Chad Smith",
     author_email="grassfedcode@gmail.com",
     description="Run Python using packages from local directory __pypackages__",

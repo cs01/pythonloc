@@ -40,11 +40,13 @@ def _get_script_path():
     return None
 
 
-def _get_pip_target_args(pip_args):
+def _get_pip_install_args(pip_args):
     if "install" in pip_args:
-        if "--target" not in pip_args:
-            # use target dir if installing
-            target = ["--target", _get_pypackages_lib_path()]
+        target = [
+            "--target",
+            _get_pypackages_lib_path(),
+        ]
+
         if (
             pip.__version__.startswith("9.") or pip.__version__.startswith("10.")
         ) and "--system" not in pip_args:
@@ -62,8 +64,8 @@ def pythonloc():
 
 def piploc():
     pip_args = sys.argv[1:]
-    target = _get_pip_target_args(pip_args)
-    args = [sys.executable] + ["-m", "pip"] + pip_args + target
+    install_args = _get_pip_install_args(pip_args)
+    args = [sys.executable] + ["-m", "pip"] + pip_args + install_args
     os.execve(sys.executable, args, _get_env())
 
 
