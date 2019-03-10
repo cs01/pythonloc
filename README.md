@@ -245,7 +245,7 @@ While this PEP is pretty exciting, there are a some things it doesn't solve.
 * `pythonloc` only looks for a local directory called `__pypackages__`. On the other hand, virtual environment activation modifies your `PATH` so you can access virtual environment packages no matter which directory you're in.
 
 ### How does it work?
-It's quite simple and clocks in at less than lines of 100 code. It uses features already built into Python and pip.
+It's quite simple and clocks in at less than 100 lines of code. It uses features already built into Python and pip.
 
 All it does is provide a slight level of indirection when invoking Python and pip. It modifies the `PYTHONPATH` environment variable when running Python to include `__pypackages__`.
 
