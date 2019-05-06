@@ -13,8 +13,6 @@ import io
 import os
 from setuptools import find_packages, setup
 
-DEPENDENCIES = ["pipx>=0.12.2.0"]
-EXCLUDE_FROM_PACKAGES = ["contrib", "docs", "tests*"]
 CURDIR = os.path.abspath(os.path.dirname(__file__))
 
 with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
@@ -22,14 +20,14 @@ with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
 
 setup(
     name="pythonloc",
-    version="0.1.2.0",
+    version="0.1.2.1",
     author="Chad Smith",
     author_email="grassfedcode@gmail.com",
     description="Run Python using packages from local directory __pypackages__",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/pipxproject/pythonloc",
-    packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
+    packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data=True,
     keywords=[],
     scripts=[],
@@ -41,7 +39,7 @@ setup(
         ]
     },
     zip_safe=False,
-    install_requires=DEPENDENCIES,
+    install_requires=['pipx>=0.12.2.0;python_version>="3.6"'],
     python_requires=">=2.7",
     # license and classifier list:
     # https://pypi.org/pypi?%3Aaction=list_classifiers
@@ -53,5 +51,6 @@ setup(
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
 )

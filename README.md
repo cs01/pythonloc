@@ -82,6 +82,8 @@ piploc ...
 If PEP 582 is adopted, I think `pip` should default to working in the appropriate `__pypackages__` directory. A flag can be added to install to site-packages, if desired.
 
 ### pipx
+*Note: pipx is included with pythonloc for Python 3.6+ only.*
+
 Installing packages that have so called "entry points" to `__pypackages__` presents a problem. The entry points, or "binaries", are no longer available on your $PATH as they would be if you installed in a virtual environment or to your system. These binaries are massively popular and useful. Examples of binaries are `black`, `pytest`, `tox`, `flake8`, `mypy`, `poetry`, and `pipenv` (and indeed `pythonloc` itself).
 
 `pipx` is a binary installer and runner for Python that, when run, searches for a binary in the appropriate `__pypackages__` location and runs it. If you are familiar with JavaScript's [`npx`](https://www.npmjs.com/package/npx), it's similar to that.
@@ -100,7 +102,7 @@ pipx run --pypackages BINARY [BINARY ARGS]
 ```
 If the binary is not found, and error will be presented.
 
-Something to note here: When installing a new package to an existing `__pypackages__` directory, the entry points will not be created in `.../3.6/lib/bin`, for example, if something is already there. To do that, you need to run `piploc install -U PACKAGE`. When you do that, the entire contents of the directory will be replaced. Fixing this would require a modification to `pip` itself.
+**Note**: When installing a new package to an existing `__pypackages__` directory, the entry points will not be created in `.../3.6/lib/bin`, for example, if something is already there. To do that, you need to run `piploc install -U PACKAGE`. When you do that, the entire contents of the directory will be replaced. Fixing this would require a modification to `pip` itself.
 
 If PEP 582 is adopted, `pipx` will be a good companion tool to run binaries.
 
