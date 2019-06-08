@@ -154,7 +154,6 @@ pythonloc <app>
 ```
 
 
-
 ### Installing from `Pipfile.lock`
 pip cannot read `Pipfile`s yet, only pipenv can. So you will need to generate requirements.txt using pipenv.
 ```
