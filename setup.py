@@ -26,7 +26,7 @@ setup(
     description="Run Python using packages from local directory __pypackages__",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/pipxproject/pythonloc",
+    url="https://github.com/cs01/pythonloc",
     packages=find_packages(exclude=["contrib", "docs", "tests*"]),
     include_package_data=True,
     keywords=[],
