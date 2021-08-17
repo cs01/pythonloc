@@ -20,9 +20,9 @@ with io.open(os.path.join(CURDIR, "README.md"), "r", encoding="utf-8") as f:
 
 setup(
     name="pythonloc",
-    version="0.1.2.1",
+    version="0.1.2.2",
     author="Chad Smith",
-    author_email="grassfedcode@gmail.com",
+    author_email="chadsmith.software@gmail.com",
     description="Run Python using packages from local directory __pypackages__",
     long_description=README,
     long_description_content_type="text/markdown",

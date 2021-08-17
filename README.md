@@ -4,8 +4,7 @@
 <img src="https://github.com/cs01/pythonloc/raw/master/pythonloc.png"/>
 </p>
 
-<a href="https://pypi.python.org/pypi/pythonloc/">
-<img src="https://img.shields.io/badge/pypi-0.1.2.1-blue.svg" /></a>
+<a href="https://badge.fury.io/py/pythonloc"><img src="https://badge.fury.io/py/pythonloc.svg" alt="PyPI version" height="18"></a>
 
 **pythonloc** is a drop in replacement for `python` and `pip` that automatically recognizes a `__pypackages__` directory and prefers importing packages installed in this location over user or global site-packages. If you are familiar with node, `__pypackages__` works similarly to `node_modules`.
 
@@ -16,6 +15,29 @@ This is an alternative to using Virtual Environments.
 This is a Python implementation of [PEP 582](https://www.python.org/dev/peps/pep-0582/), "Python local packages directory". The goal of pythonloc is to make an accessible tool while discussion takes place around adding this functionality to CPython itself. If you prefer, you can [build your own CPython](https://github.com/kushaldas/cpython/tree/pypackages) with these changes instead of using `pythonloc`.
 
 **Please note that PEP 582 has not been accepted. It may or not be accepted in the long term. `pythonloc` is experimental and its API may change in the future.**
+
+## Examples
+
+### Script
+
+
+```python
+# myapp.py
+import requests
+print(requests)
+```
+
+```bash
+> piploc install requests
+Installing collected packages: urllib3, certifi, chardet, idna, requests
+Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0 urllib3-1.24.1
+
+> pipfreezeloc
+requests==2.21.0
+
+> pythonloc myapp.py  # works!
+<module 'requests' from '/tmp/demo/__pypackages__/3.6/lib/requests/__init__.py'>
+```
 
 ## Testimonials
 
@@ -165,29 +187,6 @@ pythonloc <app>
 
 In the long term tools will be able to install directly to `__pypackages__` or piploc will be able to read various lockfile formats.
 
-
-## Examples
-
-### Script
-
-
-```python
-# myapp.py
-import requests
-print(requests)
-```
-
-```bash
-> piploc install requests
-Installing collected packages: urllib3, certifi, chardet, idna, requests
-Successfully installed certifi-2018.11.29 chardet-3.0.4 idna-2.8 requests-2.21.0 urllib3-1.24.1
-
-> pipfreezeloc
-requests==2.21.0
-
-> pythonloc myapp.py  # works!
-<module 'requests' from '/tmp/demo/__pypackages__/3.6/lib/requests/__init__.py'>
-```
 
 ### CLI
 
