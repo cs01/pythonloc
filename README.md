@@ -137,13 +137,22 @@ pythonloc <app>
 
 ### Installing from `poetry.lock`
 pip cannot read poetry.lock files, so you'll have to generate a requirements.txt file.
+
+Poetry 1.x provides `export` command:
+```bash
+poetry self:update --preview #  install 1.x version of Poetry
+poetry export -f requirements.txt
+piploc install -r requirements.txt
+pythonloc <app>
 ```
+
+For Poetry 0.x you can adopt the next approach:
+```bash
 poetry run pip freeze > requirements.txt
 piploc install -r requirements.txt
 pythonloc <app>
 ```
 
-There may be an `export` command coming to `poetry` but it hasn't landed yet. See https://github.com/sdispater/poetry/pull/675.
 
 ### Installing from `Pipfile.lock`
 pip cannot read `Pipfile`s yet, only pipenv can. So you will need to generate requirements.txt using pipenv.
